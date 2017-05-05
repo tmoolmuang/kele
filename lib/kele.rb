@@ -28,6 +28,25 @@ class Kele
     return arr
   end
   
+  def get_messages(page_num=nil)
+    unless page_num
+      response = self.class.get("/message_threads", headers: { "authorization" => @auth_token })
+    else
+      response = self.class.get("/message_threads", body: { "page" => page_num }, headers: { "authorization" => @auth_token })
+    end
+    JSON.parse(response.body)
+  end
+  
+  def create_message(sender, recipient_id, token=nil, subject, stripped_text)
+    self.class.post("/messages", 
+      body: { "sender" => sender, 
+              "recipient_id" => recipient_id, 
+              "token" => token,
+              "subject" => subject, 
+              "stripped-text" => stripped_text },
+      headers: { "authorization" => @auth_token } )
+  end
+  
   private
   def get_mentor_id_for_user
     @user['current_enrollment']['mentor_id']
