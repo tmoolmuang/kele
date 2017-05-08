@@ -60,7 +60,7 @@ class Kele
   end
   
   def update_submission(id, checkpoint_id, assignment_branch, assignment_commit_link, comment)
-    response = self.class.post("/checkpoint_submissions", 
+    response = self.class.put("/checkpoint_submissions", 
       body: { "id" => id,
               "enrollment_id" => get_enrollment_id_for_user, 
               "checkpoint_id" => checkpoint_id, 
