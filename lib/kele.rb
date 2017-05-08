@@ -38,23 +38,37 @@ class Kele
   end
   
   def create_message(sender, recipient_id, token=nil, subject, stripped_text)
-    self.class.post("/messages", 
+    response = self.class.post("/messages", 
       body: { "sender" => sender, 
               "recipient_id" => recipient_id, 
               "token" => token,
               "subject" => subject, 
               "stripped-text" => stripped_text },
       headers: { "authorization" => @auth_token } )
+    JSON.parse(response.body)
   end
   
   def create_submission(checkpoint_id, assignment_branch, assignment_commit_link, comment)
-    self.class.post("/checkpoint_submissions", 
+    response = self.class.post("/checkpoint_submissions", 
       body: { "enrollment_id" => get_enrollment_id_for_user, 
               "checkpoint_id" => checkpoint_id, 
               "assignment_branch" => assignment_branch, 
               "assignment_commit_link" => assignment_commit_link, 
               "comment" => comment },
       headers: { "authorization" => @auth_token } )
+    JSON.parse(response.body)
+  end
+  
+  def update_submission(id, checkpoint_id, assignment_branch, assignment_commit_link, comment)
+    response = self.class.post("/checkpoint_submissions", 
+      body: { "id" => id,
+              "enrollment_id" => get_enrollment_id_for_user, 
+              "checkpoint_id" => checkpoint_id, 
+              "assignment_branch" => assignment_branch, 
+              "assignment_commit_link" => assignment_commit_link, 
+              "comment" => comment },
+      headers: { "authorization" => @auth_token } )
+    JSON.parse(response.body)
   end
   
   private
